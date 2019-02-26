@@ -1,0 +1,22 @@
+{
+  "name": "mongodb-backup",
+  "version": "1.0.0",
+  "description": "node cli tool to back up mongodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Geenzo/mongoDB-backup.git"
+  },
+  "author": "Darren Hay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Geenzo/mongoDB-backup/issues"
+  },
+  "homepage": "https://github.com/Geenzo/mongoDB-backup#readme",
+  "dependencies": {
+    "mongoose": "^5.4.15"
+  }
+}
