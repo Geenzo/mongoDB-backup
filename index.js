@@ -9,13 +9,11 @@ const retrieveCollectionData = (models) => {
     const documents = models.map(model => model.find({}));
     return Promise.all(documents).then(documentData => {
         documentData.forEach((element, i) => {
-            fs.writeFile(`collection_${i}.json`, element, (err) => {
+            fs.writeFile(`collection_${i}.json`, JSON.stringify(element), (err) => {
                 if (err) throw err;
                 console.log(`collection_${i}.json created!`);
             });
-            
         });
-
     })
 }
 
