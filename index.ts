@@ -19,27 +19,27 @@ const writeDataToFile = (data: Array<object>) => {
     });
 }
 
-const retrieveCollectionData = (models) => {
+const retrieveCollectionData = (models): Promise<Array<object>> => {
     const documents: Array<Promise<any>> = models.map(model => {
         return model.find({}).then(collectionData => {
             return {collectionName: model.modelName, collectionData }
         });
     });
 
-    return Promise.all(documents).then((documentData: Array<object>) => {
-        writeDataToFile(documentData);
-    })
+    return Promise.all(documents);
 }
 
-const setupModels = (connection, collectionNames: Array<string>) => {
-    const models = collectionNames.map(collectionName => connection.model(collectionName, {}, collectionName));
-    return retrieveCollectionData(models);
-}
+const setupModels = (connection, collectionNames: Array<string>) => collectionNames.map(collectionName => connection.model(collectionName, {}, collectionName));
+
+const getCollectionNames = (collections): Array<string> => collections.map(collection => collection.collectionName);
 
 mongoose.connect(mongoString, { useNewUrlParser: true }).then((connection) => {
-    return connection.connection.db.collections().then(collections => {
-        const collectionNames = collections.map(collection => collection.collectionName);
-        return setupModels(connection, collectionNames);
+    return connection.connection.db.collections().then(async (collections) => {
+        const collectionNames = getCollectionNames(collections);
+        const models = setupModels(connection, collectionNames);
+        const data = await retrieveCollectionData(models);
+        
+        return writeDataToFile(data);
     })
 })
 
