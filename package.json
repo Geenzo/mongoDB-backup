@@ -4,6 +4,7 @@
   "description": "node cli tool to back up mongodb",
   "main": "index.js",
   "scripts": {
+    "start": "tsc index.ts & node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,5 +19,9 @@
   "homepage": "https://github.com/Geenzo/mongoDB-backup#readme",
   "dependencies": {
     "mongoose": "^5.4.15"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.3.20",
+    "typescript": "^3.3.3333"
   }
 }
