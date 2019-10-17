@@ -1,11 +1,12 @@
 import * as fs from "fs";
 import { Collection, connect, Document, Model, Mongoose, Schema } from "mongoose";
+import { IBackup } from "./@types/Backup";
 
 console.log("launching...");
 
 const mongoString: string = "mongodb://localhost:27017/admin";
 
-const writeDataToFile = (data: object[]) => {
+const writeDataToFile = (data: IBackup[]) => {
     const currentDate: Date = new Date();
     const dd: number = currentDate.getDate();
     const mm: number = currentDate.getMonth() + 1;
@@ -19,7 +20,7 @@ const writeDataToFile = (data: object[]) => {
     });
 };
 
-const retrieveCollectionData = (models: Array<Model<Document, {}>>): Promise<object[]> => {
+const retrieveCollectionData = (models: Array<Model<Document, {}>>): Promise<IBackup[]> => {
     const documents: Array<Promise<any>> = models.map(async (model) => {
         const collectionData = await model.find({}).exec();
         return { collectionName: model.modelName, collectionData };
