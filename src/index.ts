@@ -1,11 +1,11 @@
 import * as fs from "fs";
-import * as mongoose from "mongoose";
+import { Collection, connect, Connection, Document, Model, Mongoose, Schema } from "mongoose";
 
 console.log("launching...");
 
-const mongoString: string = "mongodb://localhost/test";
+const mongoString: string = "mongodb://localhost:27017/admin";
 
-const writeDataToFile = (data: Array<object>) => {
+const writeDataToFile = (data: object[]) => {
     const currentDate: Date = new Date();
     const dd: number = currentDate.getDate();
     const mm: number = currentDate.getMonth() + 1;
@@ -19,23 +19,23 @@ const writeDataToFile = (data: Array<object>) => {
     });
 };
 
-const retrieveCollectionData = (models): Promise<Array<object>> => {
-    const documents: Array<Promise<any>> = models.map((model) => {
-        return model.find({}).then((collectionData) => {
-            return {collectionName: model.modelName, collectionData };
-        });
+const retrieveCollectionData = (models: Array<Model<Document, {}>>): Promise<object[]> => {
+    const documents: Array<Promise<any>> = models.map(async (model) => {
+        const collectionData = await model.find({}).exec();
+        return { collectionName: model.modelName, collectionData };
     });
 
     return Promise.all(documents);
 };
 
-const setupModels = (connection, collectionNames: Array<string>) =>
-    collectionNames.map((collectionName) => connection.model(collectionName, {}, collectionName));
+const setupModels = (connection: Mongoose, collectionNames: string[]): Array<Model<Document, {}>> =>
+    collectionNames.map((collectionName) => connection.model(collectionName, new Schema({}), collectionName));
 
-const getCollectionNames = (collections): Array<string> => collections.map((collection) => collection.collectionName);
+const getCollectionNames = (collections: Collection[]): string[] =>
+    collections.map((collection: Collection) => collection.collectionName);
 
-mongoose.connect(mongoString, { useNewUrlParser: true }).then((connection) => {
-    return connection.connection.db.collections().then(async (collections) => {
+connect(mongoString, { useNewUrlParser: true }).then((connection: Mongoose) => {
+    return connection.connection.db.collections().then(async (collections: Collection[]) => {
         const collectionNames = getCollectionNames(collections);
         const models = setupModels(connection, collectionNames);
         const data = await retrieveCollectionData(models);
