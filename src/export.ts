@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { Collection, connect, Connection, Document, Model, Mongoose, Schema } from "mongoose";
+import { Collection, connect, Document, Model, Mongoose, Schema } from "mongoose";
 
 console.log("launching...");
 
