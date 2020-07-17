@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Geenzo/mongoDB-backup#readme",
   "dependencies": {
-    "mongoose": "^5.4.15"
+    "mongoose": "^5.7.5"
   },
   "devDependencies": {
     "@types/mongoose": "^5.7.32",
